@@ -93,3 +93,33 @@ Out[]:
 array([-4.25627649e-01, -3.42006773e-01, -7.15175271e-02, -1.09820020e+00,
         1.08186746e+00, -2.35576674e-01, -1.89862609e-01, -5.50959229e-01,
 ```
+
+
+## 追記：transformersの利用
+2020.08.21 現在、pytorch-pretrained-bertはtransformersに置き換わっています。これに対応するには、若干の仕様変更が必要です。  
+具体的には、隠れ層の出力を得るのに、モデルのforward時に引数を指定する必要があります。  
+まず、transformersはpytorch-pretrained-bertと同様に、pipでインストールすることができます。  
+
+```sh
+$ pip install pytorch-pretrained-bert
+```
+
+次に、下記のようにインポート元のライブラリ名を変更し、`get_sentence_embedding`関数内の、モデルのforward部分に引数を追加します。必要な変更は以上です。  
+変更後のコードは本レポジトリの`bert_juman_with_transformers.py`を参照してください。  
+
+```python
+#from pytorch_pretrained_bert import BertTokenizer, BertModel   # pytorch_pretrained_bert was replaced with transformers
+from transformers import BertTokenizer, BertModel               # transformers
+
+```
+
+```python
+    def get_sentence_embedding(self, text, pooling_layer=-2, pooling_strategy="REDUCE_MEAN"):
+
+        ...
+
+        self.model.eval()
+        with torch.no_grad():
+            # all_encoder_layers, _ = self.model(tokens_tensor) # for pytorch_pretrained_bert
+            all_encoder_layers = self.model(tokens_tensor, return_dict=True, output_hidden_states=True)["hidden_states"]  # for transformers
+```
