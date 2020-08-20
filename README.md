@@ -96,17 +96,18 @@ array([-4.25627649e-01, -3.42006773e-01, -7.15175271e-02, -1.09820020e+00,
 
 
 ## 追記：transformersの利用
-2020.08.21 現在、pytorch-pretrained-bertはtransformersに置き換わっています。これに対応するには、若干の仕様変更が必要です。  
+2020.08.21 現在、`pytorch-pretrained-bert`は`transformers`に置き換わっています。これに対応するには、`bert_juman.py`に若干の仕様変更が必要です。  
 具体的には、隠れ層の出力を得るのに、モデルのforward時に引数を指定する必要があります。  
-まず、transformersはpytorch-pretrained-bertと同様に、pipでインストールすることができます。  
+まず、`transformers`は`pytorch-pretrained-bert`と同様に、pipでインストールすることができます。  
 
 ```sh
-$ pip install pytorch-pretrained-bert
+$ pip install transformers
 ```
 
 次に、下記のようにインポート元のライブラリ名を変更し、`get_sentence_embedding`関数内の、モデルのforward部分に引数を追加します。必要な変更は以上です。  
 変更後のコードは本レポジトリの`bert_juman_with_transformers.py`を参照してください。  
 
+bert_juman_with_transformers.py  
 ```python
 #from pytorch_pretrained_bert import BertTokenizer, BertModel   # pytorch_pretrained_bert was replaced with transformers
 from transformers import BertTokenizer, BertModel               # transformers
